@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#131920"><title>Explore Anglet · Indexus</title><meta name="description" content="Explore Anglet terrain, vegetation, archived weather and DVF sales with the Indexus reference client for the Distributed Prefix Index Protocol (DPIP)."><link rel="icon" href="data:,">
+</head>
+<body data-experience="explore">
+  <main id="app">
+    <div id="map" aria-label="Carte des températures en France"></div>
+    <div id="thumb-zoom" aria-hidden="true"></div>
+    <div id="map-target" aria-hidden="true" hidden></div>
+    <div class="map-readout">
+      <section class="readout-section readout-date" aria-label="Date et heure">
+        <div class="readout-clock">
+          <svg id="time-solar" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" hidden>
+            <path></path>
+          </svg>
+          <span id="time-label" class="readout-value">—</span>
+        </div>
+        <h1 id="date-label" class="readout-detail">Chargement…</h1>
+      </section>
+      <section id="zone-weather" class="readout-section" aria-label="Informations de la zone visible">
+        <span class="readout-caption">Area</span>
+        <span id="viewport-mean" class="readout-value">NA</span>
+        <span id="viewport-weather" class="readout-detail">NA</span>
+      </section>
+      <section id="location-readout" class="readout-section readout-pointer" aria-label="Informations au pointeur" hidden>
+        <span class="readout-caption">Location</span>
+        <div id="pointer-weather">
+          <strong id="pointer-temperature" class="readout-value">NA</strong>
+          <span id="pointer-condition" class="readout-detail">NA</span>
+        </div>
+      </section>
+    </div>
+    <span id="dataset-label" class="sr-only" aria-live="polite">Chargement des températures…</span>
+    <section id="map-legend" class="legend-panel glass" hidden aria-label="Légende de la carte">
+    <aside class="legend" aria-label="Échelle des températures">
+      <div class="legend-title"><span>Température</span><span>°C</span></div>
+      <div class="legend-ramp"></div>
+      <div class="legend-ticks"><span>−10</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span></div>
+      <p id="temperature-render-notice" hidden>La couche de température nécessite WebGPU.</p>
+    </aside>
+      <div id="distance-scale" aria-label="Échelle de distance"></div>
+      <p class="source-credit"><a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> · <span id="source-provider">Météo-France</span> · <span id="sampling">0,01°</span></p>
+    </section>
+    <div id="message" class="message glass" role="status" aria-live="polite">Préparation de la carte…</div>
+    <section id="timeline" class="timeline glass" aria-label="Navigation temporelle">
+      <div class="timeline-controls" role="group" aria-label="Lecture et affichage de la météo">
+      <button id="play" class="play glass" aria-label="Lire l’évolution des températures" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path class="play-symbol" d="M8 5.7a1 1 0 0 1 1.5-.87l10 6.3a1 1 0 0 1 0 1.74l-10 6.3A1 1 0 0 1 8 18.3Z"/>
+          <g class="pause-symbol"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></g>
+        </svg>
+      </button>
+        <div class="day-controls" role="group" aria-label="Changer de jour">
+          <button id="previous-day" class="timeline-control" aria-label="Jour précédent" title="Jour précédent" disabled>
+            <span>−1 j</span>
+          </button>
+          <button id="next-day" class="timeline-control" aria-label="Jour suivant" title="Jour suivant" disabled>
+            <span>+1 j</span>
+          </button>
+        </div>
+        <div class="weather-controls" role="group" aria-label="Couches météo">
+          <label class="weather-toggle" title="Afficher ou masquer les températures">
+            <input id="weather-temperature" type="checkbox" checked disabled aria-label="Afficher les températures">
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0ZM12 7v10"/><circle cx="12" cy="18" r="1.5"/></svg>
+              <span class="sr-only">Température</span>
+            </span>
+          </label>
+          <label class="weather-toggle" title="Afficher ou masquer la pluie">
+            <input id="weather-rain" type="checkbox" checked disabled aria-label="Afficher la pluie">
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v5m6-3v5m6-7v5M6 13v5m6-3v5m6-7v5"/></svg>
+              <span id="rain-label" class="sr-only">Pluie</span>
+            </span>
+          </label>
+          <label class="weather-toggle" title="Afficher ou masquer les nuages">
+            <input id="weather-clouds" type="checkbox" checked disabled aria-label="Afficher les nuages">
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18a5 5 0 0 1 0-10h1a6 6 0 0 1 11 2 4 4 0 0 1 0 8Z"/></svg>
+              <span id="cloud-label" class="sr-only">Nuages</span>
+            </span>
+          </label>
+        </div>
+        <button id="pointer-toggle" class="timeline-control" aria-label="Afficher le relevé local"
+          aria-pressed="false" aria-controls="location-readout" title="Relevé local">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+        </button>
+      </div>
+      <div class="timeline-visual">
+      <div id="time-track" class="time-track">
+        <svg id="time-chart" viewBox="0 0 1000 54" preserveAspectRatio="none" aria-label="Température moyenne de la zone visible"><path id="chart-area"></path><path id="chart-line"></path></svg>
+          <svg id="solar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" hidden>
+            <path></path>
+          </svg>
+        <div id="timeline-weather" aria-label="Évolution météo dans la zone visible"></div>
+        <div id="time-ticks" aria-hidden="true"></div>
+        <input id="time-slider" type="range" min="0" max="167" step="0.001" value="12" aria-label="Date et heure sélectionnées" disabled>
+      </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/experiences/explore/main.js"></script>
+</body>
+</html>

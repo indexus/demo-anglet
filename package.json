@@ -1,0 +1,31 @@
+{
+  "name": "@indexus/demo-anglet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Explore Anglet with the Distributed Prefix Index Protocol and the Indexus JavaScript SDK",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indexus/demo-anglet.git"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5174 --strictPort",
+    "build": "vite build",
+    "test": "node --test test/data/*.test.js test/explore/*.test.js",
+    "read:dvf": "node examples/read-dvf.mjs"
+  },
+  "dependencies": {
+    "js-indexus-sdk": "file:../sdk-js",
+    "maplibre-gl": "^6.18.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "suncalc": "^2.1.2"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "vite": "^5.4.21"
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+/data/
+.env
+.env.*
+!.env.example
+coverage/
+dist/
+.local/
+*.log
+/public/data/indexus/
+/public/world/
+/data/world/
+__pycache__/
+*.pyc
