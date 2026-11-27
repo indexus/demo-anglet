@@ -10,7 +10,7 @@ Use Node.js 22 or later and a browser with WebGPU. Clone the SDK and this fronte
 
 ```sh
 git clone https://github.com/indexus/sdk.git sdk-js
-git -C sdk-js checkout --detach afc25602954b362f8e15089af2b12ac2276037db
+git -C sdk-js checkout --detach f21805185a04cf8b3c1708493a0a762ea103f411
 (cd sdk-js && npm ci)
 git clone https://github.com/indexus/demo-anglet.git
 cd demo-anglet
@@ -35,6 +35,6 @@ The viewer sources come from the Indexus Experiences release of 27 November 2026
 
 During the browser smoke test, both the hosted and local weather views displayed the AROME archive label (72 hours). Both returned HTTP 403 for the gateway metadata request ending in `/collection/TempeAROME0128v2`. Full weather rendering remains unverified. One local sales session also received HTTP 500 on a `/sets` request while displaying sale prices. A second sales session completed without that response.
 
-The build uses the [MPL-2.0 SDK source](https://github.com/indexus/sdk/tree/afc25602954b362f8e15089af2b12ac2276037db). The browser distribution includes its [license](public/notices/sdk/LICENSE) and [component notices](public/notices/sdk/LICENSE-NOTICES.md).
+The build uses the [MPL-2.0 SDK source](https://github.com/indexus/sdk/tree/f21805185a04cf8b3c1708493a0a762ea103f411). The browser distribution includes its [license](public/notices/sdk/LICENSE) and [component notices](public/notices/sdk/LICENSE-NOTICES.md).
 
 The application code is available under the [MIT licence](LICENSE). The local basemap style carries [upstream notices](public/basemap-notices.txt).
