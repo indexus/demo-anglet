@@ -1,0 +1,2 @@
+Indexus SDK 2.0.0, Mozilla Public License 2.0
+https://github.com/indexus/sdk/tree/afc25602954b362f8e15089af2b12ac2276037db
